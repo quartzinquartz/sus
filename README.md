@@ -24,7 +24,7 @@ $ awk '/GOPATH/' ~/.config/fish/config.fish
 set -gx GOPATH $HOME/code/go
 set -gx PATH $PATH $GOPATH/bin
 ```
-3. Run: `go install github.com/quartzinquartz/sus@main`
+3. Run: `go install github.com/quartzinquartz/sus@latest`
 
 ## Usage
 
