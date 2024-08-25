@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"reflect"
@@ -289,5 +290,66 @@ func TestMainFunction(t *testing.T) {
 	}
 	if !strings.Contains(output, "1 line2") {
 		t.Errorf("main() output doesn't contain expected count for line2")
+	}
+}
+
+func TestPrintAllItems(t *testing.T) {
+	oldStdout := os.Stdout
+	r, w, _ := os.Pipe()
+	os.Stdout = w
+
+	items := []item{
+		{"line1", 3},
+		{"line2", 2},
+		{"line3", 1},
+	}
+
+	printAllItems(items)
+
+	w.Close()
+	os.Stdout = oldStdout
+
+	var buf bytes.Buffer
+	io.Copy(&buf, r)
+	output := buf.String()
+
+	expectedLines := []string{"3 line1", "2 line2", "1 line3"}
+	for _, line := range expectedLines {
+		if !strings.Contains(output, line) {
+			t.Errorf("printAllItems() output doesn't contain expected line: %s", line)
+		}
+	}
+}
+
+func TestExitWithError(t *testing.T) {
+	oldOsExit := osExit
+	oldStderr := os.Stderr
+	defer func() {
+		osExit = oldOsExit
+		os.Stderr = oldStderr
+	}()
+
+	var exitCode int
+	osExit = func(code int) {
+		exitCode = code
+	}
+
+	r, w, _ := os.Pipe()
+	os.Stderr = w
+
+	expectedError := "test error"
+	exitWithError(fmt.Errorf(expectedError))
+
+	w.Close()
+	var buf bytes.Buffer
+	io.Copy(&buf, r)
+	output := buf.String()
+
+	if !strings.Contains(output, expectedError) {
+		t.Errorf("exitWithError() output doesn't contain expected error: %s", expectedError)
+	}
+
+	if exitCode != 1 {
+		t.Errorf("exitWithError() exit code = %d, want 1", exitCode)
 	}
 }

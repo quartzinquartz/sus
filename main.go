@@ -37,6 +37,8 @@ type inputResult struct {
 	counts map[string]int
 }
 
+var osExit = os.Exit
+
 func main() {
 	high := flag.Int("high", 0, "Show N most frequent results")
 	low := flag.Int("low", 0, "Show N least frequent results")
@@ -288,7 +290,7 @@ func printAllItems(items []item) {
 
 func exitWithError(err error) {
 	fmt.Fprintln(os.Stderr, err)
-	os.Exit(1)
+	osExit(1)
 }
 
 func min(a, b int) int {
