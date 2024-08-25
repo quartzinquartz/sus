@@ -49,6 +49,19 @@ sus -hp 5 -file file1.txt,file2.txt
 sus -high 5 -low 2 -file file1.txt,file2.txt -aggregate
 ```
 
+## Testing
+
+To run the tests:
+```
+go test -v ./...
+```
+
+To see test coverage:
+```
+go test -coverprofile=coverage.out ./...
+go tool cover -func=coverage.out
+```
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
