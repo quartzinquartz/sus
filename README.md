@@ -1,5 +1,7 @@
 # sus
 
+[![codecov](https://codecov.io/github/quartzinquartz/sus/graph/badge.svg?token=3ONODB7RK5)](https://codecov.io/github/quartzinquartz/sus)
+
 Inspired by `sort | uniq -c | sort -n` workflows, sus is a CLI line frequency analyzer.
 
 ## Features
