@@ -2,6 +2,8 @@
 
 [![codecov](https://codecov.io/github/quartzinquartz/sus/graph/badge.svg?token=3ONODB7RK5)](https://codecov.io/github/quartzinquartz/sus)
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/quartzinquartz/sus)](https://goreportcard.com/report/github.com/quartzinquartz/sus)
+
 **sus** is a CLI line frequency analyzer inspired by years of `sort | uniq -c | sort -n` workflows.
 
 ## Features
