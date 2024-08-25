@@ -1,0 +1,35 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [1.0.0] - 2024-08-25
+
+### Added
+- Initial release of sus
+- Functionality for counting and sorting line frequencies
+- Support for high/low count and percentage-based output
+- Case-sensitive and case-insensitive modes
+- Ability to process multiple input files
+- Aggregation option for multiple inputs
+- Verbose logging option
+- Comprehensive test suite and benchmarks
+
+### Changed
+- N/A
+
+### Deprecated
+- N/A
+
+### Removed
+- N/A
+
+### Fixed
+- N/A
+
+### Security
+- N/A
