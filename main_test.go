@@ -214,7 +214,7 @@ func TestTextOutput(t *testing.T) {
 	io.Copy(&buf, r)
 	output := buf.String()
 
-	if !strings.Contains(output, "* Results for test:") {
+	if !strings.Contains(output, "=== Results for test:") {
 		t.Errorf("textOutput() output doesn't contain expected header")
 	}
 	if !strings.Contains(output, "2 line1") {

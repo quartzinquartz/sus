@@ -25,7 +25,7 @@ Example usage:
   sus -hp 10 -lp 5 -file file1.txt,file2.txt -aggregate`
 )
 
-// item holds the value and its frequency count.
+// item represents a line of text and its frequency count.
 type item struct {
 	value string
 	count int
@@ -39,6 +39,7 @@ type inputResult struct {
 
 var osExit = os.Exit
 
+// Package main provides a command-line tool for analyzing line frequency in text (file, stdin, or both).
 func main() {
 	high := flag.Int("high", 0, "Show N most frequent results")
 	low := flag.Int("low", 0, "Show N least frequent results")
@@ -81,6 +82,7 @@ func main() {
 	textOutput(results, *high, *low, *highPercent, *lowPercent)
 }
 
+// validateFlags checks if the provided flag values are valid.
 func validateFlags(high, low int, highPercent, lowPercent float64) error {
 	if high < 0 || low < 0 {
 		return fmt.Errorf("Error: -high and -low must be non-negative integers")
@@ -91,6 +93,8 @@ func validateFlags(high, low int, highPercent, lowPercent float64) error {
 	return nil
 }
 
+// collectInputs gathers input from specified files or stdin.
+// It returns slices of io.Readers and their names, a cleanup function, and any error encountered.
 func collectInputs(flagFiles string) ([]io.Reader, []string, func(), error) {
 	var inputs []io.Reader
 	var inputNames []string
@@ -135,6 +139,8 @@ func collectInputs(flagFiles string) ([]io.Reader, []string, func(), error) {
 	return inputs, inputNames, cleanup, nil
 }
 
+// processInputs processes multiple input sources, optionally aggregating results.
+// It returns a slice of inputResult structures containing the processed data.
 func processInputs(inputs []io.Reader, inputNames []string, ignoreCase, aggregate bool, verbose bool) []inputResult {
 	var wg sync.WaitGroup
 	resultsChan := make(chan inputResult, len(inputs))
@@ -184,6 +190,7 @@ func processInputs(inputs []io.Reader, inputNames []string, ignoreCase, aggregat
 	return allResults
 }
 
+// processInput reads from the provided input and counts line frequencies.
 func processInput(input io.Reader, ignoreCase bool) map[string]int {
 	counts := make(map[string]int)
 	scanner := bufio.NewScanner(input)
@@ -205,16 +212,20 @@ func processInput(input io.Reader, ignoreCase bool) map[string]int {
 	return counts
 }
 
+// textOutput prints the processed results to stdout in a human-readable format.
+// It handles both individual and aggregated results based on the specified options.
 func textOutput(results []inputResult, high, low int, highPercent, lowPercent float64) {
 	for i, result := range results {
 		if i > 0 {
 			fmt.Println()
 		}
-		fmt.Printf("* Results for %s:\n", result.name)
+		fmt.Printf("=== Results for %s:\n", result.name)
 		printSortedResults(result.counts, high, low, highPercent, lowPercent)
 	}
 }
 
+// printSortedResults sorts and prints the line frequency results based on the specified criteria.
+// It can show the most frequent, least frequent, or a percentage-based selection of results.
 func printSortedResults(counts map[string]int, high, low int, highPercent, lowPercent float64) {
 	items := make([]item, 0, len(counts))
 	for value, count := range counts {
@@ -244,6 +255,8 @@ func printSortedResults(counts map[string]int, high, low int, highPercent, lowPe
 	}
 }
 
+// sortItems sorts a slice of items in descending order of count.
+// If counts are equal, it sorts lexicographically by value.
 func sortItems(items []item) {
 	sort.Slice(items, func(i, j int) bool {
 		if items[i].count == items[j].count {
@@ -253,6 +266,8 @@ func sortItems(items []item) {
 	})
 }
 
+// determineCounts calculates the number of items to display based on absolute counts or percentages.
+// It returns the number of high and low frequency items to show.
 func determineCounts(totalItems, high, low int, highPercent, lowPercent float64) (int, int) {
 	highCount := high
 	lowCount := low
@@ -271,6 +286,8 @@ func determineCounts(totalItems, high, low int, highPercent, lowPercent float64)
 	return highCount, lowCount
 }
 
+// printFrequencyItems prints a subset of items based on their frequency.
+// It's used to display either the highest or lowest frequency items.
 func printFrequencyItems(items []item, count int, percent float64, label string) {
 	if percent > 0 {
 		fmt.Printf("%s %.2f%% (%d) frequency items:\n", label, percent, count)
@@ -282,12 +299,15 @@ func printFrequencyItems(items []item, count int, percent float64, label string)
 	}
 }
 
+// printAllItems prints all items in the order they appear in the slice.
+// This is used when no specific high or low count is requested.
 func printAllItems(items []item) {
 	for _, item := range items {
 		fmt.Printf("%d %s\n", item.count, item.value)
 	}
 }
 
+// exitWithError prints an error message to stderr and exits the program with status code 1.
 func exitWithError(err error) {
 	fmt.Fprintln(os.Stderr, err)
 	osExit(1)

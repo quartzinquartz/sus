@@ -11,7 +11,7 @@ Inspired by `sort | uniq -c | sort -n` workflows, sus is a CLI line frequency an
 - Support for percentage-based filtering
 - Case-insensitive counting option
 - Aggregate results across multiple inputs
-- Sorts alphabetically on ties
+- Sorts lexicographically on ties
 
 ## Installation
 
