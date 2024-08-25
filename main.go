@@ -1,3 +1,6 @@
+// Copyright (c) 2024 Derek Jenkins
+// SPDX-License-Identifier: MIT
+
 package main
 
 import (
