@@ -2,7 +2,7 @@
 
 [![codecov](https://codecov.io/github/quartzinquartz/sus/graph/badge.svg?token=3ONODB7RK5)](https://codecov.io/github/quartzinquartz/sus)
 
-Inspired by `sort | uniq -c | sort -n` workflows, sus is a CLI line frequency analyzer.
+**sus** is a CLI line frequency analyzer inspired by years of `sort | uniq -c | sort -n` workflows.
 
 ## Features
 
@@ -15,14 +15,24 @@ Inspired by `sort | uniq -c | sort -n` workflows, sus is a CLI line frequency an
 
 ## Installation
 
-Do the following to install sus from source:
+To install `sus` from source:
 
-1. Ensure you have Go installed on your system.
-2. Run: `go install github.com/quartzinquartz/sus@latest`
-
-This will install the `sus` binary in your `$GOPATH/bin` directory. Ensure this directory is in your system's PATH.
+1. Have Go installed on your system. Your `go version` should be compatible with the spec from [go.mod](go.mod). 
+2. The following step will install the `sus` binary in your `$GOPATH/bin` dir. Make sure that's in your system's `$PATH`. An example Fish shell config:
+```fish
+$ awk '/GOPATH/' ~/.config/fish/config.fish
+set -gx GOPATH $HOME/code/go
+set -gx PATH $PATH $GOPATH/bin
+```
+3. Run: `go install github.com/quartzinquartz/sus@main`
 
 ## Usage
+
+To confirm installation, this should return without error:
+
+```fish
+$ sus -version
+```
 
 Basic usage:
 
@@ -52,12 +62,14 @@ sus -high 5 -low 2 -file file1.txt,file2.txt -aggregate
 
 ## Testing
 
-To run the tests:
+If you've cloned this repo and want to run the test, follow these steps.
+
+Run the tests:
 ```
 go test -v ./...
 ```
 
-To see test coverage:
+Review the test coverage:
 ```
 go test -coverprofile=coverage.out ./...
 go tool cover -func=coverage.out
